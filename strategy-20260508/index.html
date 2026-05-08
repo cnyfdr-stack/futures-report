@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夜盘量化交易策略 | 2026年5月8日</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #0a0e1a; 
+  color: #e8eaf0; 
+  min-height: 100vh;
+}
+.hero {
+  position: relative;
+  height: 480px;
+  background: linear-gradient(135deg, #0d1421 0%, #1a2744 50%, #0d1421 100%);
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(59,130,246,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16,185,129,0.1) 0%, transparent 50%),
+    url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600&q=80') center/cover no-repeat;
+  opacity: 0.6;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 60px 48px;
+  max-width: 900px;
+}
+.badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #3b82f6, #10b981);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #fff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .subtitle {
+  font-size: 18px;
+  color: #64748b;
+  margin-bottom: 32px;
+}
+.date-info {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+  color: #475569;
+}
+.date-info span { display: flex; align-items: center; gap: 6px; }
+.date-info .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #10b981;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.container { max-width: 860px; margin: 0 auto; padding: 48px 24px; }
+.card {
+  background: linear-gradient(145deg, #111827, #0f172a);
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 28px;
+}
+.card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card h2 .icon { font-size: 22px; }
+.card h2 .line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #1e293b, transparent);
+}
+.strategy-text {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #94a3b8;
+}
+.strategy-text p { margin-bottom: 16px; }
+.strategy-text strong { color: #e2e8f0; }
+.strategy-text .highlight {
+  color: #10b981;
+  font-weight: 600;
+}
+.strategy-text .warn { color: #f59e0b; }
+.trades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.trade-card {
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.trade-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.trade-card.short::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+.trade-card.long::before { background: linear-gradient(90deg, #10b981, #06b6d4); }
+.trade-card .symbol {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 4px;
+}
+.trade-card .name { font-size: 13px; color: #64748b; margin-bottom: 14px; }
+.trade-card .direction {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+.trade-card.short .direction { background: rgba(239,68,68,0.15); color: #ef4444; }
+.trade-card.long .direction { background: rgba(16,185,129,0.15); color: #10b981; }
+.trade-card .levels { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.trade-card .level { font-size: 13px; }
+.trade-card .level-label { color: #475569; margin-bottom: 2px; }
+.trade-card .level-value { color: #e2e8f0; font-weight: 600; font-family: "SF Mono", monospace; }
+.trade-card .level-value.stop { color: #ef4444; }
+.trade-card .level-value.profit { color: #10b981; }
+.trade-card .level-value.entry { color: #3b82f6; }
+.risk-meter {
+  background: #0d1117;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 8px;
+}
+.risk-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #161b22;
+  font-size: 14px;
+}
+.risk-row:last-child { border: none; }
+.risk-row .label { color: #64748b; }
+.risk-row .value { font-weight: 600; color: #e2e8f0; font-family: "SF Mono", monospace; }
+.risk-row .value.red { color: #ef4444; }
+.risk-row .value.green { color: #10b981; }
+.summary-box {
+  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(16,185,129,0.1));
+  border: 1px solid #1e3a5f;
+  border-radius: 12px;
+  padding: 24px;
+}
+.summary-box p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+.summary-box p:last-child { margin: 0; }
+.disclaimer {
+  font-size: 12px;
+  color: #475569;
+  text-align: center;
+  padding: 24px;
+  border-top: 1px solid #1e293b;
+  margin-top: 32px;
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="badge">📊 每日策略</div>
+    <h1>夜盘量化交易策略</h1>
+    <p class="subtitle">趋势跟踪 · 严格止损 · 机械执行</p>
+    <div class="date-info">
+      <span><span class="dot"></span> 2026年5月8日</span>
+      <span>⏰ 夜盘 21:00 开始</span>
+      <span>📈 3个品种 30手 总仓位</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <h2><span class="icon">📡</span> 市场分析 <span class="line"></span></h2>
+    <div class="strategy-text">
+      <p>当前市场处于<strong>区间震荡格局</strong>，大宗商品分化明显。化工板块整体偏弱，<strong>PVC</strong>和<strong>热轧卷板</strong>受制于库存压力和需求疲软，价格反弹乏力；而<strong>豆粕</strong>则受益于南美减产预期和国内养殖需求支撑，表现相对强势。</p>
+      <p>技术面上，PVC跌破均线支撑后形成<strong>空头排列</strong>，反弹至5100-5150区间可视为做空机会；热轧卷板在<strong>3500</strong>一线面临较强压力；豆粕回调至<strong>2980-3000</strong>区域企稳，是做多的理想窗口。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🎯</span> 今晚建仓计划 <span class="line"></span></h2>
+    <div class="trades-grid">
+      <div class="trade-card short">
+        <div class="symbol">V2609</div>
+        <div class="name">PVC聚氯乙烯 · 大商所</div>
+        <div class="direction">▼ 做空</div>
+        <div class="levels">
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">5147</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">5228</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">4950</div></div>
+          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
+        </div>
+      </div>
+      <div class="trade-card short">
+        <div class="symbol">HC2610</div>
+        <div class="name">热轧卷板 · 上期所</div>
+        <div class="direction">▼ 做空</div>
+        <div class="levels">
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">3483</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">3515</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">3350</div></div>
+          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
+        </div>
+      </div>
+      <div class="trade-card long">
+        <div class="symbol">M2609</div>
+        <div class="name">豆粕 · 大商所</div>
+        <div class="direction">▲ 做多</div>
+        <div class="levels">
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">3002</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">2976</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">3150</div></div>
+          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🛡️</span> 风险控制 <span class="line"></span></h2>
+    <div class="risk-meter">
+      <div class="risk-row">
+        <span class="label">每手风险金额</span>
+        <span class="value red">PVC ¥3,240 | HC ¥3,200 | M ¥2,600</span>
+      </div>
+      <div class="risk-row">
+        <span class="label">总风险金额</span>
+        <span class="value red">¥9,040（占账户 0.45%）</span>
+      </div>
+      <div class="risk-row">
+        <span class="label">最大浮亏预警</span>
+        <span class="value">账户总额 × 1% = ¥20,000</span>
+      </div>
+      <div class="risk-row">
+        <span class="label">盈亏比</span>
+        <span class="value green">PVC 1:3.2 | HC 1:2.2 | M 1:3.3</span>
+      </div>
+      <div class="risk-row">
+        <span class="label">执行原则</span>
+        <span class="value">触发止损立即平仓，不过夜扛单</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">💡</span> 策略总结 <span class="line"></span></h2>
+    <div class="summary-box">
+      <p>今晚采用<strong>"做空化工、做多农产品"</strong>的对冲思路，在保证金充足（200万）的情况下，用<strong>30手</strong>轻仓试探，总风险控制在账户的<span class="highlight">0.5%以内</span>。</p>
+      <p>每个品种均设定明确的<strong>止损位和止盈位</strong>，达到任一条件立即执行，不临时修改计划。趋势跟踪策略的核心是<strong>让利润奔跑、截断亏损</strong>。</p>
+      <p>预计夜盘21:00集合竞价后开始建仓，全程自动监控，<strong>成交/平仓结果第一时间推送</strong>。</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ 免责声明：本文仅为个人交易记录和策略分享，不构成投资建议。期货交易风险极大，请理性投资，盈亏自负。
+  </div>
+
+</div>
+</body>
+</html>
