@@ -1,613 +1,306 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>期货品种交易数据表</title>
-    <style>
-        body {
-            font-family: 'Microsoft YaHei', sans-serif;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        th {
-            background-color: #2c3e50;
-            color: white;
-            padding: 12px;
-            text-align: center;
-            font-weight: bold;
-            border: 1px solid #ddd;
-        }
-        td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        .exchange-header {
-            background-color: #3498db;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 15px;
-            text-align: center;
-        }
-        .special {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-        .low-risk {
-            color: #27ae60;
-        }
-        .medium-risk {
-            color: #f39c12;
-        }
-        .high-risk {
-            color: #e74c3c;
-        }
-        .bullish {
-            color: #c0392b;
-            font-weight: bold;
-        }
-        .bearish {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        .neutral {
-            color: #7f8c8d;
-            font-weight: bold;
-        }
-        .note {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-left: 4px solid #3498db;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #666;
-            font-size: 12px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夜盘量化交易策略 | 2026年5月8日</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #0a0e1a; 
+  color: #e8eaf0; 
+  min-height: 100vh;
+}
+.hero {
+  position: relative;
+  height: 480px;
+  background: linear-gradient(135deg, #0d1421 0%, #1a2744 50%, #0d1421 100%);
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(59,130,246,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16,185,129,0.1) 0%, transparent 50%),
+    url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600&q=80') center/cover no-repeat;
+  opacity: 0.6;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 60px 48px;
+  max-width: 900px;
+}
+.badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #3b82f6, #10b981);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #fff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .subtitle {
+  font-size: 18px;
+  color: #64748b;
+  margin-bottom: 32px;
+}
+.date-info {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+  color: #475569;
+}
+.date-info span { display: flex; align-items: center; gap: 6px; }
+.date-info .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #10b981;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.container { max-width: 860px; margin: 0 auto; padding: 48px 24px; }
+.card {
+  background: linear-gradient(145deg, #111827, #0f172a);
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 28px;
+}
+.card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card h2 .icon { font-size: 22px; }
+.card h2 .line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #1e293b, transparent);
+}
+.strategy-text {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #94a3b8;
+}
+.strategy-text p { margin-bottom: 16px; }
+.strategy-text strong { color: #e2e8f0; }
+.strategy-text .highlight {
+  color: #10b981;
+  font-weight: 600;
+}
+.strategy-text .warn { color: #f59e0b; }
+.trades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.trade-card {
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.trade-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.trade-card.short::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+.trade-card.long::before { background: linear-gradient(90deg, #10b981, #06b6d4); }
+.trade-card .symbol {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 4px;
+}
+.trade-card .name { font-size: 13px; color: #64748b; margin-bottom: 14px; }
+.trade-card .direction {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+.trade-card.short .direction { background: rgba(239,68,68,0.15); color: #ef4444; }
+.trade-card.long .direction { background: rgba(16,185,129,0.15); color: #10b981; }
+.trade-card .levels { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.trade-card .level { font-size: 13px; }
+.trade-card .level-label { color: #475569; margin-bottom: 2px; }
+.trade-card .level-value { color: #e2e8f0; font-weight: 600; font-family: "SF Mono", monospace; }
+.trade-card .level-value.stop { color: #ef4444; }
+.trade-card .level-value.profit { color: #10b981; }
+.trade-card .level-value.entry { color: #3b82f6; }
+.risk-meter {
+  background: #0d1117;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 8px;
+}
+.risk-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #161b22;
+  font-size: 14px;
+}
+.risk-row:last-child { border: none; }
+.risk-row .label { color: #64748b; }
+.risk-row .value { font-weight: 600; color: #e2e8f0; font-family: "SF Mono", monospace; }
+.risk-row .value.red { color: #ef4444; }
+.risk-row .value.green { color: #10b981; }
+.summary-box {
+  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(16,185,129,0.1));
+  border: 1px solid #1e3a5f;
+  border-radius: 12px;
+  padding: 24px;
+}
+.summary-box p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+.summary-box p:last-child { margin: 0; }
+.disclaimer {
+  font-size: 12px;
+  color: #475569;
+  text-align: center;
+  padding: 24px;
+  border-top: 1px solid #1e293b;
+  margin-top: 32px;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>📊 期货品种交易数据表</h1>
-        <div class="subtitle">数据来源：华源期货API | 每30分钟自动更新</div>
-        
-        <!-- 上期所表格 -->
-        <div class="exchange-header">🏭 上期所热门品种手续费和保证金更新（手续费全部只加一分）：2026-05-08 12:27</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>排名</th>
-                    <th>品种</th>
-                    <th>合约</th>
-                    <th>最新价(元)</th>
-                    <th>涨跌</th>
-                    <th>手续费(元/手)</th>
-                    <th>保证金(元/手)</th>
-                    <th>今日策略</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>螺纹钢</td>
-                    <td class="special">RB2610★</td>
-                    <td>3,275</td>
-                    <td style="color:#27ae60;">+10 ▲</td>
-                    <td>1.32</td>
-                    <td>2,948</td>
-                    <td><span class="bullish">▲ 短多</span><br>支撑3270/3250<br>阻力3320/3350</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>白银</td>
-                    <td class="special">AG2606★</td>
-                    <td>19,753</td>
-                    <td style="color:#e74c3c;">+524 ▲</td>
-                    <td>14.82</td>
-                    <td>65,185</td>
-                    <td><span class="bullish">▲ 强势多</span><br>支撑19,500/19,200<br>阻力20,500/21,000</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>铜</td>
-                    <td>CU2606</td>
-                    <td>102,780</td>
-                    <td style="color:#27ae60;">-230 ▼</td>
-                    <td>25.71</td>
-                    <td>61,668</td>
-                    <td><span class="bearish">▼ 偏空</span><br>阻力103,500/104,000<br>支撑101,500/101,000</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>黄金</td>
-                    <td class="special">AU2606★</td>
-                    <td>1,037.30</td>
-                    <td style="color:#e74c3c;">+1.92 ▲</td>
-                    <td>20.01</td>
-                    <td>197,087</td>
-                    <td><span class="bullish">▲ 低多</span><br>支撑1,030/1,025<br>阻力1,050/1,060</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>铝</td>
-                    <td>AL2606</td>
-                    <td>24,365</td>
-                    <td style="color:#27ae60;">-15 ▼</td>
-                    <td>3.01</td>
-                    <td>14,619</td>
-                    <td><span class="bearish">▼ 偏空</span><br>阻力24,600/24,900<br>支撑24,000/23,700</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>锌</td>
-                    <td>ZN2606</td>
-                    <td>24,280</td>
-                    <td style="color:#e74c3c;">+95 ▲</td>
-                    <td>3.01</td>
-                    <td>14,568</td>
-                    <td><span class="bullish">▲ 低多</span><br>支撑24,000/23,800<br>阻力24,600/24,900</td>
-                </tr>
-            </tbody>
-        </table>
 
-        <!-- 大商所表格 -->
-        <div class="exchange-header">🌾 大商所热门品种手续费和保证金更新（手续费全部只加一分）：2026-05-08 12:27</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>排名</th>
-                    <th>品种</th>
-                    <th>合约</th>
-                    <th>最新价(元)</th>
-                    <th>涨跌</th>
-                    <th>手续费(元/手)</th>
-                    <th>保证金(元/手)</th>
-                    <th>今日策略</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>铁矿石</td>
-                    <td>I2609</td>
-                    <td>817</td>
-                    <td style="color:#e74c3c;">+2.0 ▲</td>
-                    <td>0.83</td>
-                    <td>8,987</td>
-                    <td><span class="bullish">▲ 低多</span><br>支撑810/800<br>阻力850/870</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>豆粕</td>
-                    <td>M2609</td>
-                    <td>2,982</td>
-                    <td style="color:#27ae60;">-14 ▼</td>
-                    <td>1.51</td>
-                    <td>2,087</td>
-                    <td><span class="neutral">→ 震荡</span><br>支撑2,950/2,920<br>阻力3,050/3,080</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>棕榈油</td>
-                    <td>P2609</td>
-                    <td>9,677</td>
-                    <td style="color:#27ae60;">-86 ▼</td>
-                    <td>2.51</td>
-                    <td>7,742</td>
-                    <td><span class="bearish">▼ 偏空</span><br>阻力9,800/10,000<br>支撑9,500/9,300</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>豆油</td>
-                    <td>Y2609</td>
-                    <td>8,496</td>
-                    <td style="color:#27ae60;">-99 ▼</td>
-                    <td>2.51</td>
-                    <td>5,947</td>
-                    <td><span class="bearish">▼ 偏空</span><br>阻力8,650/8,800<br>支撑8,350/8,200</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>LLDPE</td>
-                    <td>L2609</td>
-                    <td>8,056</td>
-                    <td style="color:#27ae60;">-153 ▼</td>
-                    <td>1.01</td>
-                    <td>4,431</td>
-                    <td><span class="neutral">→ 震荡</span><br>支撑8,000/7,900<br>阻力8,200/8,300</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>PVC</td>
-                    <td>V2609</td>
-                    <td>5,177</td>
-                    <td style="color:#27ae60;">-16 ▼</td>
-                    <td>1.01</td>
-                    <td>2,847</td>
-                    <td><span class="neutral">→ 震荡</span><br>支撑5,100/5,000<br>阻力5,300/5,400</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>玉米</td>
-                    <td>C2609</td>
-                    <td>2,380</td>
-                    <td style="color:#27ae60;">-20 ▼</td>
-                    <td>1.21</td>
-                    <td>1,666</td>
-                    <td><span class="neutral">→ 偏空</span><br>阻力2,420/2,450<br>支撑2,350/2,320</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>焦炭</td>
-                    <td>J2609</td>
-                    <td>1,843.5</td>
-                    <td style="color:#27ae60;">-7.5 ▼</td>
-                    <td>1.85</td>
-                    <td>36,870</td>
-                    <td><span class="bearish">▼ 反弹空</span><br>阻力1,880/1,900<br>支撑1,820/1,800</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>焦煤</td>
-                    <td>JM2609</td>
-                    <td>1,297</td>
-                    <td style="color:#e74c3c;">+2 ▲</td>
-                    <td>0.79</td>
-                    <td>9,338</td>
-                    <td><span class="neutral">→ 震荡</span><br>支撑1,270/1,250<br>阻力1,330/1,350</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- 郑商所表格 -->
-        <div class="exchange-header">🧪 郑商所热门品种手续费和保证金更新（手续费全部只加一分）：2026-05-08 12:27</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>排名</th>
-                    <th>品种</th>
-                    <th>合约</th>
-                    <th>最新价(元)</th>
-                    <th>涨跌</th>
-                    <th>手续费(元/手)</th>
-                    <th>保证金(元/手)</th>
-                    <th>今日策略</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>PTA</td>
-                    <td>TA609</td>
-                    <td>6,392</td>
-                    <td style="color:#27ae60;">-196 ▼</td>
-                    <td>3.01</td>
-                    <td>4,155</td>
-                    <td><span class="bearish">▼ 偏空</span><br>阻力6,500/6,600<br>支撑6,200/6,100</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>甲醇</td>
-                    <td>MA609</td>
-                    <td>2,863</td>
-                    <td style="color:#27ae60;">-67 ▼</td>
-                    <td>1.01</td>
-                    <td>3,722</td>
-                    <td><span class="bearish">▼ 反弹空</span><br>阻力2,920/2,950<br>支撑2,800/2,750</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>白糖</td>
-                    <td>SR609</td>
-                    <td>5,456</td>
-                    <td style="color:#e74c3c;">+38 ▲</td>
-                    <td>3.01</td>
-                    <td>3,274</td>
-                    <td><span class="bullish">▲ 低多</span><br>支撑5,380/5,300<br>阻力5,600/5,700</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>玻璃</td>
-                    <td>FG609</td>
-                    <td>1,064</td>
-                    <td style="color:#27ae60;">-7 ▼</td>
-                    <td>6.01</td>
-                    <td>2,128</td>
-                    <td><span class="bearish">▼ 偏空</span><br>阻力1,090/1,110<br>支撑1,030/1,010</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>纯碱</td>
-                    <td>SA609</td>
-                    <td>1,238</td>
-                    <td style="color:#27ae60;">-24 ▼</td>
-                    <td>2.01</td>
-                    <td>2,228</td>
-                    <td><span class="bearish">▼ 偏空</span><br>阻力1,270/1,300<br>支撑1,200/1,180</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>菜粕</td>
-                    <td>RM609</td>
-                    <td>2,349</td>
-                    <td style="color:#27ae60;">-30 ▼</td>
-                    <td>1.51</td>
-                    <td>1,644</td>
-                    <td><span class="neutral">→ 震荡</span><br>支撑2,300/2,270<br>阻力2,400/2,430</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>硅铁</td>
-                    <td>SF609</td>
-                    <td>5,782</td>
-                    <td style="color:#27ae60;">-36 ▼</td>
-                    <td>3.01</td>
-                    <td>2,313</td>
-                    <td><span class="bearish">▼ 反弹空</span><br>阻力5,880/5,950<br>支撑5,700/5,600</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>锰硅</td>
-                    <td>SM609</td>
-                    <td>6,046</td>
-                    <td style="color:#27ae60;">-28 ▼</td>
-                    <td>3.01</td>
-                    <td>2,418</td>
-                    <td><span class="bearish">▼ 反弹空</span><br>阻力6,150/6,220<br>支撑5,950/5,880</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- 中金所表格 -->
-        <div class="exchange-header">🏛️ 中金所热门品种手续费和保证金更新（手续费全部只加一分）：2026-05-08 12:27</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>排名</th>
-                    <th>品种</th>
-                    <th>合约</th>
-                    <th>最新价(元)</th>
-                    <th>涨跌</th>
-                    <th>手续费(元/手)</th>
-                    <th>保证金(元/手)</th>
-                    <th>今日策略</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>沪深300</td>
-                    <td>IF2606</td>
-                    <td>4,818.4</td>
-                    <td style="color:#27ae60;">-44.2 ▼</td>
-                    <td>33.26</td>
-                    <td>173,462</td>
-                    <td><span class="neutral">→ 震荡</span><br>支撑4,780/4,750<br>阻力4,900/4,950</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>中证500</td>
-                    <td>IC2606</td>
-                    <td>8,556.2</td>
-                    <td style="color:#27ae60;">-67.2 ▼</td>
-                    <td>39.37</td>
-                    <td>308,023</td>
-                    <td><span class="bearish">▼ 偏空</span><br>支撑8,450/8,350<br>阻力8,700/8,800</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>上证50</td>
-                    <td>IH2606</td>
-                    <td>2,972.8</td>
-                    <td style="color:#27ae60;">-38.6 ▼</td>
-                    <td>20.52</td>
-                    <td>107,021</td>
-                    <td><span class="neutral">→ 震荡</span><br>支撑2,950/2,930<br>阻力3,020/3,060</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- 能源中心表格 -->
-        <div class="exchange-header">⚡ 能源中心热门品种手续费和保证金更新（手续费全部只加一分）：2026-05-08 12:27</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>排名</th>
-                    <th>品种</th>
-                    <th>合约</th>
-                    <th>最新价(元)</th>
-                    <th>涨跌</th>
-                    <th>手续费(元/手)</th>
-                    <th>保证金(元/手)</th>
-                    <th>今日策略</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>原油</td>
-                    <td>SC2606</td>
-                    <td>628.5</td>
-                    <td style="color:#27ae60;">-6.2 ▼</td>
-                    <td>40.01</td>
-                    <td>106,645</td>
-                    <td><span class="bearish">▼ 反弹空</span><br>阻力650/660<br>支撑620/610</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- 广期所表格 -->
-        <div class="exchange-header">🔋 广期所热门品种手续费和保证金更新（手续费全部只加一分）：2026-05-08 12:27</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>排名</th>
-                    <th>品种</th>
-                    <th>合约</th>
-                    <th>最新价(元)</th>
-                    <th>涨跌</th>
-                    <th>手续费(元/手)</th>
-                    <th>保证金(元/手)</th>
-                    <th>今日策略</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>碳酸锂</td>
-                    <td>LC2609</td>
-                    <td>197,620</td>
-                    <td style="color:#e74c3c;">+440 ▲</td>
-                    <td>1.99</td>
-                    <td>29,643</td>
-                    <td><span class="bullish">▲ 强势多</span><br>支撑195,000/192,000<br>阻力200,000/205,000</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- 风险等级表格 -->
-        <div class="exchange-header">🎯 按风险等级分类</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>风险等级</th>
-                    <th>品种</th>
-                    <th>合约</th>
-                    <th>保证金(元)</th>
-                    <th>特点</th>
-                    <th>适合人群</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="low-risk">🔵 低风险</td>
-                    <td>PVC</td>
-                    <td>V2609</td>
-                    <td>2,847</td>
-                    <td>波动小，稳定</td>
-                    <td>新手投资者</td>
-                </tr>
-                <tr>
-                    <td class="low-risk">🔵 低风险</td>
-                    <td>玉米</td>
-                    <td>C2609</td>
-                    <td>1,666</td>
-                    <td>稳定，季节性</td>
-                    <td>稳健型投资者</td>
-                </tr>
-                <tr>
-                    <td class="low-risk">🔵 低风险</td>
-                    <td>菜粕</td>
-                    <td>RM609</td>
-                    <td>1,644</td>
-                    <td>波动小，季节性</td>
-                    <td>稳健型投资者</td>
-                </tr>
-                <tr>
-                    <td class="medium-risk">🟡 中风险</td>
-                    <td>螺纹钢</td>
-                    <td>RB2610</td>
-                    <td>2,948</td>
-                    <td>流动性好，趋势明显</td>
-                    <td>有经验交易者</td>
-                </tr>
-                <tr>
-                    <td class="medium-risk">🟡 中风险</td>
-                    <td>纯碱</td>
-                    <td>SA609</td>
-                    <td>2,228</td>
-                    <td>低位机会，波动适中</td>
-                    <td>波段交易者</td>
-                </tr>
-                <tr>
-                    <td class="medium-risk">🟡 中风险</td>
-                    <td>豆粕</td>
-                    <td>M2609</td>
-                    <td>2,087</td>
-                    <td>季节性明显，波动适中</td>
-                    <td>波段交易者</td>
-                </tr>
-                <tr>
-                    <td class="high-risk">🔴 高风险</td>
-                    <td>黄金</td>
-                    <td>AU2606</td>
-                    <td>197,087</td>
-                    <td>高价值，波动大</td>
-                    <td>激进型投资者</td>
-                </tr>
-                <tr>
-                    <td class="high-risk">🔴 高风险</td>
-                    <td>碳酸锂</td>
-                    <td>LC2609</td>
-                    <td>29,643</td>
-                    <td>波动极大，新能源概念</td>
-                    <td>高风险偏好者</td>
-                </tr>
-                <tr>
-                    <td class="high-risk">🔴 高风险</td>
-                    <td>原油</td>
-                    <td>SC2606</td>
-                    <td>106,645</td>
-                    <td>国际商品，波动大</td>
-                    <td>激进型投资者</td>
-                </tr>
-                <tr>
-                    <td class="high-risk">🔴 高风险</td>
-                    <td>中证500</td>
-                    <td>IC2606</td>
-                    <td>308,023</td>
-                    <td>指数波动，保证金高</td>
-                    <td>激进型投资者</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="note">
-            <strong>📋 使用说明：</strong><br>
-            1. 策略颜色含义：<span class="bullish">▲ 红色</span>=看多 | <span class="bearish">▼ 绿色</span>=看空 | <span class="neutral">→ 灰色</span>=震荡<br>
-            2. 手续费在交易所公示费率基础上统一+0.01元/手<br>
-            3. 保证金按最新价×合约乘数×保证金率估算<br>
-            4. 建议轻仓操作，严格设置止损<br>
-            5. 数据仅供参考，实时价格以交易软件为准
-        </div>
-
-        <div class="footer">
-            💼 专业交易工具：OpenClaw量化API | ⏰ 数据实时更新 | 🔔 支持实时监控
-        </div>
+<div class="hero">
+  <div class="hero-content">
+    <div class="badge">📊 每日策略</div>
+    <h1>夜盘量化交易策略</h1>
+    <p class="subtitle">趋势跟踪 · 严格止损 · 机械执行</p>
+    <div class="date-info">
+      <span><span class="dot"></span> 2026年5月8日</span>
+      <span>⏰ 夜盘 21:00 开始</span>
+      <span>📈 3个品种 30手 总仓位</span>
     </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <h2><span class="icon">📡</span> 市场分析 <span class="line"></span></h2>
+    <div class="strategy-text">
+      <p>当前市场处于<strong>区间震荡格局</strong>，大宗商品分化明显。化工板块整体偏弱，<strong>PVC</strong>和<strong>热轧卷板</strong>受制于库存压力和需求疲软，价格反弹乏力；而<strong>豆粕</strong>则受益于南美减产预期和国内养殖需求支撑，表现相对强势。</p>
+      <p>技术面上，PVC跌破均线支撑后形成<strong>空头排列</strong>，反弹至5100-5150区间可视为做空机会；热轧卷板在<strong>3500</strong>一线面临较强压力；豆粕回调至<strong>2980-3000</strong>区域企稳，是做多的理想窗口。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🎯</span> 今晚建仓计划 <span class="line"></span></h2>
+    <div class="trades-grid">
+      <div class="trade-card short">
+        <div class="symbol">V2609</div>
+        <div class="name">PVC聚氯乙烯 · 大商所</div>
+        <div class="direction">▼ 做空</div>
+        <div class="levels">
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">5147</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">5228</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">4950</div></div>
+          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
+        </div>
+      </div>
+      <div class="trade-card short">
+        <div class="symbol">HC2610</div>
+        <div class="name">热轧卷板 · 上期所</div>
+        <div class="direction">▼ 做空</div>
+        <div class="levels">
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">3483</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">3515</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">3350</div></div>
+          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
+        </div>
+      </div>
+      <div class="trade-card long">
+        <div class="symbol">M2609</div>
+        <div class="name">豆粕 · 大商所</div>
+        <div class="direction">▲ 做多</div>
+        <div class="levels">
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">3002</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">2976</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">3150</div></div>
+          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🛡️</span> 风险控制 <span class="line"></span></h2>
+    <div class="risk-meter">
+      <div class="risk-row">
+        <span class="label">每手风险金额</span>
+        <span class="value red">PVC ¥3,240 | HC ¥3,200 | M ¥2,600</span>
+      </div>
+      <div class="risk-row">
+        <span class="label">总风险金额</span>
+        <span class="value red">¥9,040（占账户 0.45%）</span>
+      </div>
+      <div class="risk-row">
+        <span class="label">最大浮亏预警</span>
+        <span class="value">账户总额 × 1% = ¥20,000</span>
+      </div>
+      <div class="risk-row">
+        <span class="label">盈亏比</span>
+        <span class="value green">PVC 1:3.2 | HC 1:2.2 | M 1:3.3</span>
+      </div>
+      <div class="risk-row">
+        <span class="label">执行原则</span>
+        <span class="value">触发止损立即平仓，不过夜扛单</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">💡</span> 策略总结 <span class="line"></span></h2>
+    <div class="summary-box">
+      <p>今晚采用<strong>"做空化工、做多农产品"</strong>的对冲思路，在保证金充足（200万）的情况下，用<strong>30手</strong>轻仓试探，总风险控制在账户的<span class="highlight">0.5%以内</span>。</p>
+      <p>每个品种均设定明确的<strong>止损位和止盈位</strong>，达到任一条件立即执行，不临时修改计划。趋势跟踪策略的核心是<strong>让利润奔跑、截断亏损</strong>。</p>
+      <p>预计夜盘21:00集合竞价后开始建仓，全程自动监控，<strong>成交/平仓结果第一时间推送</strong>。</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ 免责声明：本文仅为个人交易记录和策略分享，不构成投资建议。期货交易风险极大，请理性投资，盈亏自负。
+  </div>
+
+</div>
 </body>
 </html>
