@@ -3,212 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>夜盘量化交易策略 | 2026年5月8日</title>
+<title>夜盘量化交易策略 v2.0 | 2026年5月8日</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { 
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: #0a0e1a; 
-  color: #e8eaf0; 
-  min-height: 100vh;
-}
-.hero {
-  position: relative;
-  height: 480px;
-  background: linear-gradient(135deg, #0d1421 0%, #1a2744 50%, #0d1421 100%);
-  overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(59,130,246,0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(16,185,129,0.1) 0%, transparent 50%),
-    url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600&q=80') center/cover no-repeat;
-  opacity: 0.6;
-}
-.hero-content {
-  position: relative;
-  z-index: 2;
-  padding: 60px 48px;
-  max-width: 900px;
-}
-.badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #3b82f6, #10b981);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 14px;
-  border-radius: 20px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
-.hero h1 {
-  font-size: 42px;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 16px;
-  background: linear-gradient(90deg, #fff 0%, #94a3b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.hero .subtitle {
-  font-size: 18px;
-  color: #64748b;
-  margin-bottom: 32px;
-}
-.date-info {
-  display: flex;
-  gap: 24px;
-  font-size: 14px;
-  color: #475569;
-}
-.date-info span { display: flex; align-items: center; gap: 6px; }
-.date-info .dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #10b981;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
-}
-.container { max-width: 860px; margin: 0 auto; padding: 48px 24px; }
-.card {
-  background: linear-gradient(145deg, #111827, #0f172a);
-  border: 1px solid #1e293b;
-  border-radius: 16px;
-  padding: 32px;
-  margin-bottom: 28px;
-}
-.card h2 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #f1f5f9;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.card h2 .icon { font-size: 22px; }
-.card h2 .line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, #1e293b, transparent);
-}
-.strategy-text {
-  font-size: 15px;
-  line-height: 1.9;
-  color: #94a3b8;
-}
-.strategy-text p { margin-bottom: 16px; }
-.strategy-text strong { color: #e2e8f0; }
-.strategy-text .highlight {
-  color: #10b981;
-  font-weight: 600;
-}
-.strategy-text .warn { color: #f59e0b; }
-.trades-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-}
-.trade-card {
-  background: #0d1117;
-  border: 1px solid #21262d;
-  border-radius: 12px;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-}
-.trade-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #0a0e1a; color: #e8eaf0; min-height: 100vh; }
+.hero { position: relative; height: 520px; background: linear-gradient(135deg, #0d1421 0%, #1a2744 50%, #0d1421 100%); overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 80%, rgba(59,130,246,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(16,185,129,0.1) 0%, transparent 50%); opacity: 0.6; }
+.hero::after { content: ''; position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600&q=80') center/cover no-repeat; opacity: 0.25; }
+.hero-content { position: relative; z-index: 2; padding: 56px 48px; max-width: 900px; }
+.badge { display: inline-block; background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 20px; letter-spacing: 1px; margin-bottom: 18px; }
+.hero h1 { font-size: 40px; font-weight: 700; line-height: 1.25; margin-bottom: 14px; background: linear-gradient(90deg, #fff 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero .subtitle { font-size: 17px; color: #64748b; margin-bottom: 28px; }
+.stats-row { display: flex; gap: 32px; flex-wrap: wrap; }
+.stat { text-align: left; }
+.stat .val { font-size: 28px; font-weight: 700; font-family: "SF Mono", monospace; }
+.stat .val.green { color: #10b981; }
+.stat .val.red { color: #ef4444; }
+.stat .label { font-size: 12px; color: #475569; margin-top: 2px; }
+.container { max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+.card { background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid #1e293b; border-radius: 16px; padding: 28px; margin-bottom: 24px; }
+.card h2 { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+.card h2 .icon { font-size: 20px; }
+.card h2 .line { flex: 1; height: 1px; background: linear-gradient(90deg, #1e293b, transparent); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.trade-card { background: #0d1117; border: 1px solid #21262d; border-radius: 12px; padding: 18px; position: relative; overflow: hidden; }
+.trade-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
 .trade-card.short::before { background: linear-gradient(90deg, #ef4444, #f97316); }
 .trade-card.long::before { background: linear-gradient(90deg, #10b981, #06b6d4); }
-.trade-card .symbol {
-  font-size: 20px;
-  font-weight: 700;
-  color: #f1f5f9;
-  margin-bottom: 4px;
-}
-.trade-card .name { font-size: 13px; color: #64748b; margin-bottom: 14px; }
-.trade-card .direction {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 6px;
-  margin-bottom: 12px;
-  display: inline-block;
-}
+.trade-card .symbol { font-size: 18px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
+.trade-card .name { font-size: 12px; color: #64748b; margin-bottom: 12px; }
+.trade-card .direction { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 5px; display: inline-block; margin-bottom: 10px; }
 .trade-card.short .direction { background: rgba(239,68,68,0.15); color: #ef4444; }
 .trade-card.long .direction { background: rgba(16,185,129,0.15); color: #10b981; }
-.trade-card .levels { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.trade-card .level { font-size: 13px; }
-.trade-card .level-label { color: #475569; margin-bottom: 2px; }
-.trade-card .level-value { color: #e2e8f0; font-weight: 600; font-family: "SF Mono", monospace; }
-.trade-card .level-value.stop { color: #ef4444; }
-.trade-card .level-value.profit { color: #10b981; }
-.trade-card .level-value.entry { color: #3b82f6; }
-.risk-meter {
-  background: #0d1117;
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 8px;
-}
-.risk-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #161b22;
-  font-size: 14px;
-}
-.risk-row:last-child { border: none; }
-.risk-row .label { color: #64748b; }
-.risk-row .value { font-weight: 600; color: #e2e8f0; font-family: "SF Mono", monospace; }
-.risk-row .value.red { color: #ef4444; }
-.risk-row .value.green { color: #10b981; }
-.summary-box {
-  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(16,185,129,0.1));
-  border: 1px solid #1e3a5f;
-  border-radius: 12px;
-  padding: 24px;
-}
-.summary-box p {
-  font-size: 15px;
-  line-height: 1.8;
-  color: #94a3b8;
-  margin-bottom: 12px;
-}
+.levels { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.level { font-size: 12px; }
+.level-label { color: #475569; margin-bottom: 1px; }
+.level-value { font-weight: 600; font-family: "SF Mono", monospace; font-size: 13px; }
+.level-value.entry { color: #3b82f6; }
+.level-value.stop { color: #ef4444; }
+.level-value.profit { color: #10b981; }
+.level-value.red { color: #ef4444; }
+.level-value.green { color: #10b981; }
+.level-value.gold { color: #f59e0b; }
+.money-box { background: linear-gradient(135deg, #1e3a5f, #0d2744); border: 1px solid #2563eb; border-radius: 14px; padding: 22px; }
+.money-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #1e3a5f; font-size: 14px; }
+.money-row:last-child { border: none; }
+.money-row .label { color: #64748b; }
+.money-row .val { font-weight: 600; font-family "SF Mono", monospace; }
+.calc-box { background: #0d1117; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-top: 8px; }
+.calc-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #161b22; }
+.calc-row:last-child { border: none; }
+.calc-row .lbl { color: #64748b; }
+.calc-row .v { font-weight: 600; font-family: "SF Mono", monospace; }
+.summary-box { background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(16,185,129,0.08)); border: 1px solid #1e3a5f; border-radius: 12px; padding: 22px; }
+.summary-box p { font-size: 14px; line-height: 1.85; color: #94a3b8; margin-bottom: 10px; }
 .summary-box p:last-child { margin: 0; }
-.disclaimer {
-  font-size: 12px;
-  color: #475569;
-  text-align: center;
-  padding: 24px;
-  border-top: 1px solid #1e293b;
-  margin-top: 32px;
-}
+.summary-box strong { color: #e2e8f0; }
+.summary-box .highlight { color: #10b981; font-weight: 600; }
+.summary-box .warn { color: #f59e0b; }
+.disclaimer { font-size: 12px; color: #475569; text-align: center; padding: 20px; border-top: 1px solid #1e293b; margin-top: 24px; }
 </style>
 </head>
 <body>
 
 <div class="hero">
   <div class="hero-content">
-    <div class="badge">📊 每日策略</div>
-    <h1>夜盘量化交易策略</h1>
-    <p class="subtitle">趋势跟踪 · 严格止损 · 机械执行</p>
-    <div class="date-info">
-      <span><span class="dot"></span> 2026年5月8日</span>
-      <span>⏰ 夜盘 21:00 开始</span>
-      <span>📈 3个品种 30手 总仓位</span>
+    <div class="badge">🚀 激进策略 v2.0</div>
+    <h1>20万翻倍计划<br>夜盘量化交易策略</h1>
+    <p class="subtitle">集中持仓 · 趋势跟踪 · 机械执行 · 8周目标100%</p>
+    <div class="stats-row">
+      <div class="stat"><div class="val">¥200,000</div><div class="label">起始资金</div></div>
+      <div class="stat"><div class="val green">¥400,000</div><div class="label">8周目标</div></div>
+      <div class="stat"><div class="val gold">+100%</div><div class="label">收益率目标</div></div>
+      <div class="stat"><div class="val red">-3%</div><div class="label">单笔最大风险</div></div>
     </div>
   </div>
 </div>
@@ -216,36 +83,39 @@ body {
 <div class="container">
 
   <div class="card">
-    <h2><span class="icon">📡</span> 市场分析 <span class="line"></span></h2>
-    <div class="strategy-text">
-      <p>当前市场处于<strong>区间震荡格局</strong>，大宗商品分化明显。化工板块整体偏弱，<strong>PVC</strong>和<strong>热轧卷板</strong>受制于库存压力和需求疲软，价格反弹乏力；而<strong>豆粕</strong>则受益于南美减产预期和国内养殖需求支撑，表现相对强势。</p>
-      <p>技术面上，PVC跌破均线支撑后形成<strong>空头排列</strong>，反弹至5100-5150区间可视为做空机会；热轧卷板在<strong>3500</strong>一线面临较强压力；豆粕回调至<strong>2980-3000</strong>区域企稳，是做多的理想窗口。</p>
+    <h2><span class="icon">🎯</span> 目标拆解 <span class="line"></span></h2>
+    <div class="money-box">
+      <div class="money-row"><span class="label">起始资金</span><span class="val" style="color:#e2e8f0">¥200,000</span></div>
+      <div class="money-row"><span class="label">8周净赚</span><span class="val" style="color:#10b981">+¥200,000</span></div>
+      <div class="money-row"><span class="label">日均盈利需求</span><span class="val" style="color:#f59e0b">≈ ¥4,545/天</span></div>
+      <div class="money-row"><span class="label">所需总交易天数</span><span class="val">约40天（8周×5天）</span></div>
+      <div class="money-row"><span class="label">预计交易次数</span><span class="val">20~30笔</span></div>
+      <div class="money-row"><span class="label">胜率要求</span><span class="val" style="color:#f59e0b">≥60%</span></div>
+      <div class="money-row"><span class="label">盈亏比</span><span class="val" style="color:#10b981">1 : 3 以上</span></div>
     </div>
   </div>
 
   <div class="card">
-    <h2><span class="icon">🎯</span> 今晚建仓计划 <span class="line"></span></h2>
-    <div class="trades-grid">
+    <h2><span class="icon">📡</span> 市场分析 <span class="line"></span></h2>
+    <div class="summary-box">
+      <p><strong>化工板块偏弱：</strong>PVC下游需求疲软，库存高位，反弹至5100-5150视为做空机会；热轧卷板受制于钢厂复产压力，<strong>3500一线强压</strong>。</p>
+      <p><strong>农产品偏强：</strong>豆粕南美减产支撑，回调至2980-3000是理想做多窗口。欧线集运指数波动剧烈，适合趋势行情捕捉。</p>
+      <p><strong>贵金属：</strong>白银波动率极高，趋势来时单日可达<strong>3-5%</strong>，是本策略的核心利润来源。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">⚡</span> 今晚建仓计划 <span class="line"></span></h2>
+    <div class="grid">
       <div class="trade-card short">
-        <div class="symbol">V2609</div>
-        <div class="name">PVC聚氯乙烯 · 大商所</div>
+        <div class="symbol">AG2606</div>
+        <div class="name">白银 · 上期所</div>
         <div class="direction">▼ 做空</div>
         <div class="levels">
-          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">5147</div></div>
-          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">5228</div></div>
-          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">4950</div></div>
-          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
-        </div>
-      </div>
-      <div class="trade-card short">
-        <div class="symbol">HC2610</div>
-        <div class="name">热轧卷板 · 上期所</div>
-        <div class="direction">▼ 做空</div>
-        <div class="levels">
-          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">3483</div></div>
-          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">3515</div></div>
-          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">3350</div></div>
-          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">18,648</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">18,900</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">17,500</div></div>
+          <div class="level"><div class="level-label">手数</div><div class="level-value gold">3手</div></div>
         </div>
       </div>
       <div class="trade-card long">
@@ -253,52 +123,63 @@ body {
         <div class="name">豆粕 · 大商所</div>
         <div class="direction">▲ 做多</div>
         <div class="levels">
-          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">3002</div></div>
-          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">2976</div></div>
-          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">3150</div></div>
-          <div class="level"><div class="level-label">数量</div><div class="level-value">10手</div></div>
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">3,002</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">2,976</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">3,200</div></div>
+          <div class="level"><div class="level-label">手数</div><div class="level-value gold">5手</div></div>
+        </div>
+      </div>
+      <div class="trade-card short">
+        <div class="symbol">V2609</div>
+        <div class="name">PVC · 大商所</div>
+        <div class="direction">▼ 做空</div>
+        <div class="levels">
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">5,147</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">5,228</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">4,850</div></div>
+          <div class="level"><div class="level-label">手数</div><div class="level-value gold">5手</div></div>
+        </div>
+      </div>
+      <div class="trade-card short">
+        <div class="symbol">EC2606</div>
+        <div class="name">欧线集运 · 能源中心</div>
+        <div class="direction">▼ 做空</div>
+        <div class="levels">
+          <div class="level"><div class="level-label">开仓价</div><div class="level-value entry">2,334</div></div>
+          <div class="level"><div class="level-label">止损价</div><div class="level-value stop">2,450</div></div>
+          <div class="level"><div class="level-label">止盈价</div><div class="level-value profit">2,000</div></div>
+          <div class="level"><div class="level-label">手数</div><div class="level-value gold">2手</div></div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h2><span class="icon">🛡️</span> 风险控制 <span class="line"></span></h2>
-    <div class="risk-meter">
-      <div class="risk-row">
-        <span class="label">每手风险金额</span>
-        <span class="value red">PVC ¥3,240 | HC ¥3,200 | M ¥2,600</span>
-      </div>
-      <div class="risk-row">
-        <span class="label">总风险金额</span>
-        <span class="value red">¥9,040（占账户 0.45%）</span>
-      </div>
-      <div class="risk-row">
-        <span class="label">最大浮亏预警</span>
-        <span class="value">账户总额 × 1% = ¥20,000</span>
-      </div>
-      <div class="risk-row">
-        <span class="label">盈亏比</span>
-        <span class="value green">PVC 1:3.2 | HC 1:2.2 | M 1:3.3</span>
-      </div>
-      <div class="risk-row">
-        <span class="label">执行原则</span>
-        <span class="value">触发止损立即平仓，不过夜扛单</span>
-      </div>
+    <h2><span class="icon">🛡️</span> 风险预算 <span class="line"></span></h2>
+    <div class="calc-box">
+      <div class="calc-row"><span class="lbl">白银 AG 3手</span><span class="v red">¥6,000</span></div>
+      <div class="calc-row"><span class="lbl">豆粕 M 5手</span><span class="v red">¥5,000</span></div>
+      <div class="calc-row"><span class="lbl">PVC V 5手</span><span class="v red">¥5,700</span></div>
+      <div class="calc-row"><span class="lbl">欧线 EC 2手</span><span class="v red">¥5,800</span></div>
+      <div class="calc-row"><span class="lbl" style="color:#e2e8f0;font-weight:600">总风险金额</span><span class="v red">¥22,500</span></div>
+      <div class="calc-row"><span class="lbl">占账户比例</span><span class="v" style="color:#f59e0b">11.25%（警戒线20%）</span></div>
+      <div class="calc-row"><span class="lbl">触发止损出场</span><span class="v">全品种同步止损，不过夜</span></div>
     </div>
   </div>
 
   <div class="card">
-    <h2><span class="icon">💡</span> 策略总结 <span class="line"></span></h2>
+    <h2><span class="icon">💡</span> 策略核心原则 <span class="line"></span></h2>
     <div class="summary-box">
-      <p>今晚采用<strong>"做空化工、做多农产品"</strong>的对冲思路，在保证金充足（200万）的情况下，用<strong>30手</strong>轻仓试探，总风险控制在账户的<span class="highlight">0.5%以内</span>。</p>
-      <p>每个品种均设定明确的<strong>止损位和止盈位</strong>，达到任一条件立即执行，不临时修改计划。趋势跟踪策略的核心是<strong>让利润奔跑、截断亏损</strong>。</p>
-      <p>预计夜盘21:00集合竞价后开始建仓，全程自动监控，<strong>成交/平仓结果第一时间推送</strong>。</p>
+      <p>1. <strong>集中火力：</strong>只做4个品种，每笔都是<strong>3-5手</strong>，不做分散薄仓</p>
+      <p>2. <strong>让利润奔跑：</strong>止盈位设置<strong>1:3以上</strong>，不提前平仓，白银目标<strong>1,100点</strong>利润</p>
+      <p>3. <strong>截断亏损：</strong>触发止损<strong>立即无条件执行</strong>，不扛单、不补仓</p>
+      <p>4. <strong>每日复盘：</strong>收盘后记录持仓、检查信号，<strong>21:00前完成建仓</strong></p>
+      <p>5. <strong>周度总结：</strong>每周核算账户，若跑输周目标1.5%<strong>减半仓</strong>，连赢3周后恢复</p>
     </div>
   </div>
 
   <div class="disclaimer">
-    ⚠️ 免责声明：本文仅为个人交易记录和策略分享，不构成投资建议。期货交易风险极大，请理性投资，盈亏自负。
+    ⚠️ 免责声明：本文仅供个人交易记录参考，不构成投资建议。期货交易风险极大，请理性投资，盈亏自负。
   </div>
 
 </div>
